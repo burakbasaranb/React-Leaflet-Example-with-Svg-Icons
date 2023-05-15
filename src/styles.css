@@ -1,0 +1,24 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+html, body, #root, .App, #mapId{
+   height: 100%;
+   width: 100%;
+   margin: 0px;
+   padding: 0px;
+}
+
+.App{
+   position: relative;
+}
+
+#mapId {
+   position: fixed;
+   top: 0px;
+   bottom: 0px;
+   left: 0px;
+   right: 0px;
+   z-index: 0;
+}

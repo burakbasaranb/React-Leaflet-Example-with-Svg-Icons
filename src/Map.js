@@ -13,7 +13,7 @@ import { Istanbul_Euro, Istanbul_Anatolia } from './coordinate'
 
 const { BaseLayer } = LayersControl;
 
-const MyMap = () => {
+const MyMap = () => { 
 
   const iconMaker = L.icon({
     iconUrl: icon,

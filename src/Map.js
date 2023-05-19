@@ -2,34 +2,22 @@ import React, { useEffect, useState, useRef } from "react";
 
 import { Map as LeafletMap, TileLayer, Marker, Popup, LayersControl} from "react-leaflet";
 import 'leaflet/dist/leaflet.css'
+import './index.css'
 import L from 'leaflet';
-import icon from 'leaflet/dist/images/marker-icon.png'
-import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png'
-import iconShadow from 'leaflet/dist/images/marker-shadow.png'
-
-import 'leaflet-arrowheads'
-import Polyline from 'react-leaflet-arrowheads';
-import { Istanbul_Euro, Istanbul_Anatolia } from './coordinate'
+import { renderToString } from 'react-dom/server';
+import { SvgIcon_circle, SvgIcon_rect, SvgIcon_linkedin } from './svgIcons';
 
 const { BaseLayer } = LayersControl;
 
-const MyMap = () => { 
-
-  const iconMaker = L.icon({
-    iconUrl: icon,
-    iconRetinaUrl: iconRetinaUrl,
-    shadowUrl: iconShadow,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    tooltipAnchor: [16, -28],
-    shadowSize: [41, 41]
-  });
+const MyMap = () => {
 
   const yandexCrs = L.CRS.EPSG3395;
   const otherCrs = L.CRS.EPSG3857;
-  const defaultZoom = 9;
-  const mapCenter = [40.873795896121194, 29.091452032765492];
+  const defaultZoom = 10;
+  const mapCenter = [40.980025480279345, 29.027560864012592];
+  const markerCircle = [40.873795896121194, 29.091452032765492];
+  const markerRect = [40.868752160207144, 29.12765133715833]; 
+  const markerLinkedin = [40.980025480279345, 29.027560864012592]; 
   const [CusromCRS, setCusromCRS] = useState(otherCrs); // [googleCrs, yandexCrs
   const mapRef = useRef(null);
 
@@ -51,7 +39,26 @@ const MyMap = () => {
   }, [CusromCRS]);
 
   //console.log(mapRef.current.props.crs)
+  const iconSvg_circle = L.divIcon({
+    className: 'LsvgIcon',
+    // eslint-disable-next-line react/jsx-pascal-case 
+    html: renderToString(<SvgIcon_circle fill='red' width={24} height={24} />)
+  });
 
+  const iconSvg_rect = L.divIcon({
+    className: 'LsvgIcon',
+    // eslint-disable-next-line react/jsx-pascal-case 
+    html: renderToString(<SvgIcon_rect fill='blue' width={24} height={24} />)
+  });
+  const iconSvg_Linkedin = L.divIcon({
+    className: 'LsvgIcon',
+    // eslint-disable-next-line react/jsx-pascal-case 
+    html: renderToString(<SvgIcon_linkedin fill='#1e3050' width={24} height={24} />)
+  });
+  
+  const handleMarkerClick = () => {
+    window.location.href = 'https://www.linkedin.com/in/burakbaşaran/'; // LinkedIn hesabının URL'si
+  };
 
     return (
       <div>
@@ -61,7 +68,7 @@ const MyMap = () => {
         id="mapId"
         zoom={defaultZoom}
         ref={mapRef}
-        crs={CusromCRS}
+        crs={CusromCRS} 
         >
 
       <LayersControl>
@@ -113,24 +120,23 @@ const MyMap = () => {
           </BaseLayer>
         </LayersControl>
 
-        <Marker position={mapCenter} icon={iconMaker}>
+        <Marker position={markerLinkedin} icon={iconSvg_Linkedin} onClick={handleMarkerClick}>
             <Popup>
              Marker
             </Popup>
         </Marker>
 
-        <Polyline smoothFactor={5} color="darkred" positions={Istanbul_Euro} arrowheads={{ size: '5px' }}>
-        <Popup>
-          <code>{`<Polyline smoothFactor={5} color="darkred" positions={serbianBorder} arrowheads={{ size: '5px' }}>`}</code>
-        </Popup>
-      </Polyline>
+        <Marker position={markerCircle} icon={iconSvg_circle}>
+            <Popup>
+             Marker
+            </Popup>
+        </Marker>
 
-      <Polyline smoothFactor={5} color="blue" positions={Istanbul_Anatolia} arrowheads={{ size: '5px' }}>
-        <Popup>
-          <code>{`<Polyline smoothFactor={5} color="darkred" positions={serbianBorder} arrowheads={{ size: '5px' }}>`}</code>
-        </Popup>
-      </Polyline>
-
+        <Marker position={markerRect} icon={iconSvg_rect}>
+            <Popup>
+             Marker
+            </Popup>
+        </Marker>
       
       </LeafletMap>
       </div>
